@@ -1,7 +1,9 @@
 var mysql = require('mysql');
 require('dotenv').config();
 
-var connection = mysql.createConnection({
+console.log("Start pooling...")
+var connection = mysql.createPool({
+  connectionLimit: 10,
   host: process.env.DB_HOST,
   port: process.env.DB_PORT,
   user: process.env.DB_USER,
