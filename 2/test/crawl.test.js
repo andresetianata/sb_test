@@ -2,8 +2,12 @@ var chai = require('chai');
 var expect = require('chai').expect;
 var chai_http = require('chai-http');
 
-//const url = `https://apis.andresetiawan.com/stockbit`;
-const url = "http://localhost:8001"
+require("dotenv").config();
+
+var url = "";
+if (process.env.SERVER == "development") url = "http://localhost:8001";
+else url = `https://apis.andresetiawan.com/stockbit`
+
 chai.use(chai_http);
 
 describe("Search Test", ()=> {
