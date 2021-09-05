@@ -79,14 +79,14 @@ function insert_logging(endpoint, parameter) {
 }
 async function api_do_search_movie_title(req,res) {
   try {
-    if (req.query.s) {
-      if (req.query.s.length == 0) throw { responseCode:400, status: "error", errorMessage: "invalid search parameter" }
+    if (req.query.keyword) {
+      if (req.query.keyword.length == 0) throw { responseCode:400, status: "error", errorMessage: "invalid search parameter" }
       var page = 1; //default page
       if (Number.isInteger(parseInt(req.query.page))) page = parseInt(req.query.page);
       
       var splittedUrl = get_path_and_query_string(req.originalUrl);
       let search = await call_omdbapi({
-        "s": req.query.s,
+        "s": req.query.keyword,
         "page": req.query.page
       });
       let logging = await insert_logging(splittedUrl.path, splittedUrl.queryString);
@@ -116,11 +116,11 @@ async function api_do_search_movie_title(req,res) {
 
 async function api_do_get_movie_detail(req, res) {
   try {
-    if (req.query.i || req.query.t) {
+    if (req.query.id || req.query.title) {
       var paramsObject = {};
       var splittedUrl = get_path_and_query_string(req.originalUrl);
-      if (req.query.i) paramsObject.i = req.query.i;
-      if (req.query.t) paramsObject.t = req.query.t;
+      if (req.query.id) paramsObject.i = req.query.id;
+      if (req.query.title) paramsObject.t = req.query.title;
 
       let detail = await call_omdbapi(paramsObject);
       let logging = await insert_logging(splittedUrl.path, splittedUrl.queryString);
