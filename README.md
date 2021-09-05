@@ -48,12 +48,13 @@ In case you want to run it locally on your computer: (if there's an error or som
   - DB_USER=your username
   - DB_PASSWORD=your password
   - OMDB_KEY=faf7e5bb&s
+  - SERVER=production
 3. npm start
 
 
 _**Do the Unit Test**_
 
-I've made some unit tests in file 2/test/crawl.test.js. Please run it with command : **npm test**
+I've made some unit tests in file 2/unit_test/crawl.test.js. Please run it with command : **npm test**
 
 
 **Number 3**: Refactoring the code. 
