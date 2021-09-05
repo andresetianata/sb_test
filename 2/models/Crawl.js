@@ -1,40 +1,74 @@
 const db = require('./MySQLConnector');
 const axios = require('axios');
-const connection = require('./MySQLConnector');
+require('dotenv').config();
 
 module.exports = {
-  api_test_view_user
+  api_do_search_movie_title,
+  api_do_get_movie_detail
 }
 
-function api_test_view_user(req, res) {
-  //testing if mysql is successfully connected with query
-  db.getConnection(function(errorGet, connection) {
-    if (errorGet) return;
-    //console.log("Connection got")
-    connection.query('select a.ID, a.UserName, b.UserName as ParentUserName from `USER` a LEFT JOIN `USER` b ON b.ID = a.Parent', function(error, results, field) {
-      if (!error) {
-        res.json({
-          status: "success",
-          data: results
-        })
+function call_omdbapi(paramsObject) {
+  return new Promise((resolve, reject) => {
+    var url = `https://www.omdbapi.com/?apikey=${process.env.OMDB_KEY}`;
+    axios.get(url, {
+      params: paramsObject
+    })
+    .then(function(result) {
+      if (result.data.Response == 'True') {
+        resolve(result.data);
       }
       else {
-        res.json({
-          status: "error",
-          errorMessage: error
-        })
+        reject(result.data); //berisi error message dari OMDB
       }
-      connection.release();
+    })
+    .catch(function(error) {
+      reject(error);
+    })
+  });
+}
+
+async function api_do_search_movie_title(req,res) {
+  try {
+    let search = await call_omdbapi({
+      "s": req.query.s,
+      "page": req.query.page
     });
-  })
+
+    res.json({
+      status: "success",
+      data: search
+    })
+  }
+  catch(error) {
+    console.log(error);
+    res.json({
+      status: "error",
+      errorMessage: error
+    })
+  }
+  
 }
 
-function api_do_search_movie_title(req,res) {
+async function api_do_get_movie_detail(req, res) {
+  try {
+    var paramsObject = {};
+    if (req.query.i) paramsObject.i = req.query.i;
+    if (req.query.t) paramsObject.t = req.query.t;
 
-}
+    let detail = await call_omdbapi(paramsObject);
 
-function api_do_get_movie_detail(req, res) {
-
+    res.json({
+      status: "success",
+      data: detail
+    })
+  }
+  catch(error) {
+    console.log(error);
+    res.json({
+      status: "error",
+      errorMessage: error
+    })
+  }
 }
 
 function api_do_logging_access(req, res) {
