@@ -25,9 +25,8 @@ function call_omdbapi(paramsObject) {
       params: paramsObject
     })
     .then(function(result) {
-      //ketika mencoba melakukan testing untuk mendapatkan detail, ternyata Error response nya dari omdbapi berupa string
+      //ketika mencoba melakukan testing untuk mendapatkan detail dengan id yang mengandung spasi, ternyata format value di key 'Error' nya salah. jadi JSON tidak bisa di parse
       //ex error yang berupa string : {"Response":"False","Error":"Conversion from string "Spider Man" to type 'Double' is not valid."}, saat querystring 'i' tidak berupa ID Imdb
-      //tapi ternyata format value di key 'Error' nya salah. jadi JSON tidak bisa di parse.
       if (typeof result.data === 'string') {
         try {
           result.data = JSON.parse(result.data);
@@ -117,6 +116,9 @@ async function api_do_search_movie_title(req,res) {
 async function api_do_get_movie_detail(req, res) {
   try {
     if (req.query.id || req.query.title) {
+      //jika API OMDB diberi IMDB ID yang invalid(diluar alphanumeric), maka response JSON yang di dapat akan error/tidak bisa diparsing
+      //maka, difilter saja supaya req.query.id yang diterima hanyalah yang berupa alphanumeric
+      if (req.query.id && !req.query.id.match(/^[a-zA-Z0-9]+$/g)) throw { responseCode:400, status: "error", errorMessage: "invalid ID parameter"}
       var paramsObject = {};
       var splittedUrl = get_path_and_query_string(req.originalUrl);
       if (req.query.id) paramsObject.i = req.query.id;
