@@ -3,6 +3,7 @@ CREATE TABLE `ACCESS_LOG` (
   `DateTimeAccess` datetime DEFAULT NULL,
   `EndPoint` varchar(100) DEFAULT NULL,
   `Parameter` varchar(100) DEFAULT NULL,
+  `HttpResponseCode` integer default NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB
 DEFAULT CHARSET=utf8mb4

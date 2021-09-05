@@ -99,33 +99,33 @@ describe("Detail test", () => {
       done();
     })
   })
-  it("Request with Invalid ID", (done)=> {
+  it("Request with Invalid ID. Expect Error", (done)=> {
     chai.request(url)
     .get(`/apis/detail`)
     .query({id: "BatMan"}) //this ID is invalid
     .end((err, res) => {
       //console.log(res)
       expect(err).to.be.null;
-      expect(res).to.have.status(500);
+      expect(res).to.have.status(400);
       expect(res.body).to.be.a('object');
       expect(res.body.status).to.equal("error");
       done();
     })
   })
-  it("Request with Invalid ID, outside alphanumeric", (done)=> {
+  it("Request with Invalid ID, outside alphanumeric. Expect Error", (done)=> {
     chai.request(url)
     .get(`/apis/detail`)
     .query({id: "Bat Man"}) //this ID is containing spaces (outside alphanumeric)
     .end((err, res) => {
       //console.log(res)
       expect(err).to.be.null;
-      expect(res).to.have.status(500);
+      expect(res).to.have.status(400);
       expect(res.body).to.be.a('object');
       expect(res.body.status).to.equal("error");
       done();
     })
   })
-  it("Request with Invalid title", (done)=> {
+  it("Request with Invalid title. Expect Error", (done)=> {
     chai.request(url)
     .get(`/apis/detail`)
     .query({id: "asdasfasfsadsa"}) //this movie title is invalid

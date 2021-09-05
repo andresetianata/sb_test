@@ -60,12 +60,12 @@ function call_omdbapi(paramsObject) {
     })
   });
 }
-function insert_logging(endpoint, parameter) {
+function insert_logging(endpoint, parameter, responseCode) {
   return new Promise((resolve, reject) => {
     db.getConnection((errorConnection, connection) => {
       if (errorConnection) reject({responseCode: 500, status: "error", errorMessage: "failed to connect to database"});
       var CURRENT_TIMESTAMP = {toSqlString: function() { return 'CURRENT_TIMESTAMP()'; }}
-      var sql = connection.format("INSERT INTO `ACCESS_LOG` (DateTimeAccess, EndPoint, Parameter) VALUES (?,?,?)", [CURRENT_TIMESTAMP, endpoint, parameter])
+      var sql = connection.format("INSERT INTO `ACCESS_LOG` (DateTimeAccess, EndPoint, Parameter) VALUES (?,?,?,?)", [CURRENT_TIMESTAMP, endpoint, parameter, responseCode])
       connection.query(sql, (errorQuery, results, fields) => {
         if (errorQuery) reject({responseCode: 500, status: "error", errorMessage: "Query error"});
         
@@ -88,7 +88,7 @@ async function api_do_search_movie_title(req,res) {
         "s": req.query.keyword,
         "page": req.query.page
       });
-      let logging = await insert_logging(splittedUrl.path, splittedUrl.queryString);
+      let logging = await insert_logging(splittedUrl.path, splittedUrl.queryString, 200); //Http 200 = OK
 
       res.status(200).json({
         status: "success",
@@ -105,6 +105,7 @@ async function api_do_search_movie_title(req,res) {
     }
   }
   catch(error) {
+    let logging = await insert_logging(splittedUrl.path, splittedUrl.queryString, error.responseCode); //Http 400 = Bad Request
     res.status(error.responseCode).json({
       status: error.status,
       errorMessage: error.errorMessage
@@ -125,7 +126,7 @@ async function api_do_get_movie_detail(req, res) {
       if (req.query.title) paramsObject.t = req.query.title;
 
       let detail = await call_omdbapi(paramsObject);
-      let logging = await insert_logging(splittedUrl.path, splittedUrl.queryString);
+      let logging = await insert_logging(splittedUrl.path, splittedUrl.queryString, 200); //Http 200 = OK
 
       res.json({
         status: "success",
@@ -141,6 +142,7 @@ async function api_do_get_movie_detail(req, res) {
     }
   }
   catch(error) {
+    let logging = await insert_logging(splittedUrl.path, splittedUrl.queryString, error.responseCode); //Http 400 = Bad Request
     res.status(error.responseCode).json({
       status: error.status,
       errorMessage: error.errorMessage
