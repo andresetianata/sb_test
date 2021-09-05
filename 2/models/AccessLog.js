@@ -1,4 +1,4 @@
-const db = require('./MySQLConnector');
+const db = require('../db/MySQLConnector');
 
 module.exports = {
   api_do_logging_access
