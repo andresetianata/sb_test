@@ -19,8 +19,19 @@ _**Public Accessible URL to check the result**_
 Here's the URL
 
 Search : https://apis.andresetiawan.com/stockbit/apis/search?keyword=Spider-Man&page=1
+| Query String | Definition | Example |
+| --------- | ---------- | -------- |
+| keyword | Keyword of movie title | Spider-Man |
+| page | Pagination | 1 |
 
 Detail : https://apis.andresetiawan.com/stockbit/apis/detail?id=tt0371746
+
+| Query String | Definition | Example |
+| --------- | ---------- | -------- |
+| id | IMDB ID | tt0371746 |
+| title | Movie Title | Iron Man |
+
+(choose one between id or title)
 
 View access log : https://apis.andresetiawan.com/stockbit/apis/view_access_log
 
