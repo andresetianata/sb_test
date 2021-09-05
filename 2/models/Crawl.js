@@ -65,7 +65,7 @@ function insert_logging(endpoint, parameter, responseCode) {
     db.getConnection((errorConnection, connection) => {
       if (errorConnection) reject({responseCode: 500, status: "error", errorMessage: "failed to connect to database"});
       var CURRENT_TIMESTAMP = {toSqlString: function() { return 'CURRENT_TIMESTAMP()'; }}
-      var sql = connection.format("INSERT INTO `ACCESS_LOG` (DateTimeAccess, EndPoint, Parameter) VALUES (?,?,?,?)", [CURRENT_TIMESTAMP, endpoint, parameter, responseCode])
+      var sql = connection.format("INSERT INTO `ACCESS_LOG` (DateTimeAccess, EndPoint, Parameter, HttpResponseCode) VALUES (?,?,?,?)", [CURRENT_TIMESTAMP, endpoint, parameter, responseCode])
       connection.query(sql, (errorQuery, results, fields) => {
         if (errorQuery) reject({responseCode: 500, status: "error", errorMessage: "Query error"});
         
