@@ -54,7 +54,7 @@ In case you want to run it locally on your computer: (if there's an error or som
 
 _**Do the Unit Test**_
 
-I've made some unit tests in file 2/unit_test/crawl.test.js. Please run it with command : **npm test**
+I've made some unit tests in file 2/test/crawl.test.js. Please run it with command : **npm test**
 
 
 **Number 3**: Refactoring the code. 
