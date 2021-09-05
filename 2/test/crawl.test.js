@@ -2,7 +2,8 @@ var chai = require('chai');
 var expect = require('chai').expect;
 var chai_http = require('chai-http');
 
-const url = `https://apis.andresetiawan.com/stockbit`;
+//const url = `https://apis.andresetiawan.com/stockbit`;
+const url = "http://localhost:8001"
 chai.use(chai_http);
 
 describe("Search Test", ()=> {

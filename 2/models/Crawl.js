@@ -77,13 +77,13 @@ function insert_logging(endpoint, parameter, responseCode) {
   })
 }
 async function api_do_search_movie_title(req,res) {
+  var splittedUrl = get_path_and_query_string(req.originalUrl);
   try {
     if (req.query.keyword) {
       if (req.query.keyword.length == 0) throw { responseCode:400, status: "error", errorMessage: "invalid search parameter" }
       var page = 1; //default page
       if (Number.isInteger(parseInt(req.query.page))) page = parseInt(req.query.page);
       
-      var splittedUrl = get_path_and_query_string(req.originalUrl);
       let search = await call_omdbapi({
         "s": req.query.keyword,
         "page": req.query.page
@@ -115,13 +115,13 @@ async function api_do_search_movie_title(req,res) {
 }
 
 async function api_do_get_movie_detail(req, res) {
+  var splittedUrl = get_path_and_query_string(req.originalUrl);
   try {
     if (req.query.id || req.query.title) {
       //jika API OMDB diberi IMDB ID yang invalid(diluar alphanumeric), maka response JSON yang di dapat akan error/tidak bisa diparsing
       //maka, difilter saja supaya req.query.id yang diterima hanyalah yang berupa alphanumeric
       if (req.query.id && !req.query.id.match(/^[a-zA-Z0-9]+$/g)) throw { responseCode:400, status: "error", errorMessage: "invalid ID parameter"}
       var paramsObject = {};
-      var splittedUrl = get_path_and_query_string(req.originalUrl);
       if (req.query.id) paramsObject.i = req.query.id;
       if (req.query.title) paramsObject.t = req.query.title;
 
