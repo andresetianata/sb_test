@@ -10,8 +10,15 @@ module.exports = {
 
 function get_path_and_query_string(originalUrl) {
   var index = originalUrl.indexOf("?");
-  var path = originalUrl.substr(0, index);
-  var queryString = originalUrl.substr(index, originalUrl.length);
+  var path, queryString;
+  if (index >= 0) {
+    path = originalUrl.substr(0, index);
+    queryString = originalUrl.substr(index, originalUrl.length);
+  }
+  else {
+    path = originalUrl;
+    queryString = "";
+  }
 
   return {
     path,
