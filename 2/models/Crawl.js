@@ -101,7 +101,3 @@ async function api_do_get_movie_detail(req, res) {
     })
   }
 }
-
-function api_do_logging_access(req, res) {
-  
-}
